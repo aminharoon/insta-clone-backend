@@ -4,12 +4,18 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: [true, "username is already taken"],
-        required: [true, "username is mandatory"]
+        required: [true, "username is mandatory"],
+        lowerCase: true,
+        trim: true,
+        set: (value) => value.replace(/\s+/g, "")
     },
     email: {
         type: String,
         unique: [true, "email is already in our record"],
-        required: [true, "email is required"]
+        required: [true, "email is required"],
+        lowerCase: true,
+        trim: true,
+        set: (value) => value.replace(/\s+/g, "")
     },
     password: {
         type: String,
@@ -23,6 +29,6 @@ const userSchema = new mongoose.Schema({
 
 
 }, { timestamps: true })
-const userModel = mongoose.model("user's", userSchema)
+const userModel = mongoose.model("user", userSchema)
 
 module.exports = userModel

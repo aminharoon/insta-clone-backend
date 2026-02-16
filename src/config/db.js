@@ -1,9 +1,17 @@
 const mongoose = require("mongoose")
+const DB_NAME = require("../constants")
 
-async function connectToDataBase() {
-    const res = await mongoose.connect(process.env.DATABASE_URL)
-    console.log("connected to data base ")
+const connectDB = async () => {
+    try {
+        const responce = await mongoose.connect(`${process.env.DATABASE_URL}/${DB_NAME}`)
+        console.log(`connected to DB `)
+
+    } catch (error) {
+        console.log(error.message)
+
+    }
+
 }
 
 
-module.exports = connectToDataBase
+module.exports = connectDB
