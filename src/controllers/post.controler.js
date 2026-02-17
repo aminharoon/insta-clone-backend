@@ -11,28 +11,7 @@ const ImageKit = new imageKit({
 /** create post  */
 async function createPostController(req, res) {
     try {
-
-        //get the token from the cookies 
-
-        const token = req.cookies.token
-        if (!token) {
-            return res.status(401).json({
-                message: "Token not provided"
-            })
-        }
-        let decoded;
-
-        try {
-            // verify the token 
-            decoded = jwt.verify(token, process.env.JWT_SECRET)
-        } catch (error) {
-            return res.status(401).json({
-                message: "Invalid token",
-                error: error.message
-            })
-        }
-
-
+        console.log(req.user)
 
         /** upload an image to the image kit  */
         const file = await ImageKit.files.upload({
@@ -47,7 +26,7 @@ async function createPostController(req, res) {
         const post = await postModel.create({
             caption: req.body.caption,
             image_url: file.url,
-            user: decoded.id
+            user: req.user.id
         })
         res.status(201).json({
             message: "post is created successfully ",
@@ -65,23 +44,8 @@ async function createPostController(req, res) {
 /**get the posts  */
 async function getPostController(req, res) {
     try {
-        const token = req.cookies.token
-        if (!token) {
-            return res.status(401).json({
-                message: "invalid token "
-            })
-        }
-        let decoded = null
-        try {
-            decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-        } catch (error) {
-            return res.status(401).json({
-                message: "error",
-                error: error.message
-            })
-        }
-        const userId = decoded.id;
+        //verify the user
+        const userId = req.user.id;
         const post = await postModel.find({
             user: userId
         })
@@ -105,25 +69,8 @@ async function getPostController(req, res) {
 
 async function getUserDetailsController(req, res) {
     try {
-        const token = req.cookies.token
-        if (!token) {
-            return res.status(401).json({
-                message: "Invalid token unauthorized access"
-            })
-        }
-        let decoded = null;
-        try {
-            decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-        } catch (error) {
-            res.status(401).json({
-                message: "error",
-                error: error.message
-            })
-
-        }
-
-        const userId = decoded.id;
+        const userId = req.user.id;
         const postId = req.params.postId
 
         const post = await postModel.findById(postId)
