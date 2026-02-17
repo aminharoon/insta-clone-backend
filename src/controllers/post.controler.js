@@ -62,4 +62,100 @@ async function createPostController(req, res) {
     }
 }
 
-module.exports = { createPostController } 
+/**get the posts  */
+async function getPostController(req, res) {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            return res.status(401).json({
+                message: "invalid token "
+            })
+        }
+        let decoded = null
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        } catch (error) {
+            return res.status(401).json({
+                message: "error",
+                error: error.message
+            })
+        }
+        const userId = decoded.id;
+        const post = await postModel.find({
+            user: userId
+        })
+        res.status(200).json({
+            message: "successfully fetch the post  ",
+            post
+        })
+
+
+
+    } catch (error) {
+        return res.status().json({
+            message: "there is an error",
+            error: error.message
+        })
+    }
+}
+
+
+/**get the post details about specific post with the id  and also check the weather the post belongs to the user that the req come from  */
+
+async function getUserDetailsController(req, res) {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            return res.status(401).json({
+                message: "Invalid token unauthorized access"
+            })
+        }
+        let decoded = null;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        } catch (error) {
+            res.status(401).json({
+                message: "error",
+                error: error.message
+            })
+
+        }
+
+        const userId = decoded.id;
+        const postId = req.params.postId
+
+        const post = await postModel.findById(postId)
+        if (!post) {
+            return res.status(404).json({
+                message: "404 POST NOT FOUND"
+            })
+        }
+
+        const isValidUser = post.user.toString() === userId
+        if (!isValidUser) {
+            return res.status(403).json({
+                message: "forbidden content"
+
+            })
+        }
+
+        return res.status(200).json({
+            message: "post fetched successfully",
+            post
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "there is an error",
+            error: error.message
+        })
+
+    }
+
+
+
+}
+
+
+module.exports = { createPostController, getPostController, getUserDetailsController } 

@@ -11,4 +11,9 @@ const upload = multer({ storage: multer.memoryStorage() })
  */
 postRouter.post("/create", upload.single("image"), postController.createPostController)
 
+postRouter.get('/getPoste', postController.getPostController)
+
+
+postRouter.get("/details/:postId", postController.getUserDetailsController)
+
 module.exports = postRouter
