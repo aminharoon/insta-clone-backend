@@ -20,6 +20,4 @@ postRouter.get('/getPoste', verifyUser, postController.getPostController)
 postRouter.get("/details/:postId", verifyUser, postController.getUserDetailsController)
 
 
-
-
 module.exports = postRouter
