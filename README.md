@@ -2,6 +2,10 @@
 
 A full-stack Instagram clone application built with **Node.js/Express** backend and modern frontend framework.
 
+## ⚠️ Status
+
+🔄 **UNDER PROCESS** - This project is actively under development. Features and API endpoints may change.
+
 ## 📋 Features
 
 - **User Authentication** - Register, login with JWT tokens
@@ -34,13 +38,16 @@ A full-stack Instagram clone application built with **Node.js/Express** backend 
 insta-clone/
 ├── src/
 │   ├── controllers/
-│   │   ├── auth.controller.js
-│   │   └── post.controller.js
+│   │   ├── auth.controler.js
+│   │   └── post.controler.js
+│   ├── middleware/
+│   │   └── auth.middleware.js
 │   ├── models/
 │   │   ├── user.model.js
-│   │   └── post.model.js
+│   │   ├── post.model.js
+│   │   └── follow.model.js
 │   ├── routes/
-│   │   ├── auth.routes.js
+│   │   ├── auth.route.js
 │   │   └── post.routes.js
 │   ├── config/
 │   │   └── db.js
@@ -48,7 +55,8 @@ insta-clone/
 │   └── constants.js
 ├── server.js
 ├── package.json
-└── .env
+├── .env
+└── .gitignore
 ```
 
 ## 🚀 Getting Started
@@ -109,6 +117,37 @@ MIT
 ## 👨‍💻 Author
 
 Amin Haroon - [GitHub](https://github.com/aminharoon)
+
+## 📊 Development Progress
+
+### Completed ✅
+
+- [x] Project setup & initialization
+- [x] User authentication (register/login)
+- [x] JWT token implementation
+- [x] MongoDB integration
+- [x] User model & schema
+- [x] Post model & schema
+- [x] Basic post creation endpoint
+- [x] Image upload with Multer & ImageKit
+
+### In Progress 🔄
+
+- [ ] Follow/Unfollow functionality
+- [ ] Like & Unlike posts
+- [ ] Comments on posts
+- [ ] Post feed with pagination
+- [ ] User profile endpoints
+- [ ] Search functionality
+
+### TODO 📋
+
+- [ ] Frontend application (React/Vue)
+- [ ] Real-time notifications
+- [ ] Direct messaging
+- [ ] Hashtag support
+- [ ] Trending posts
+- [ ] User recommendations
 
 ---
 
