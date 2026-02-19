@@ -72,7 +72,7 @@ insta-clone/
 1. Clone the repository:
 
 ```bash
-git clone [ https://github.com/aminharoon/insta-clone.git](https://github.com/aminharoon/insta-clone-backend.git)
+git clone  https://github.com/aminharoon/insta-clone.git
 cd insta-clone
 ```
 
