@@ -11,7 +11,7 @@ const ImageKit = new imageKit({
 /** create post  */
 async function createPostController(req, res) {
     try {
-        console.log(req.user)
+
 
         /** upload an image to the image kit  */
         const file = await ImageKit.files.upload({
@@ -88,7 +88,7 @@ async function getUserDetailsController(req, res) {
             })
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             message: "post fetched successfully",
             post
         })
