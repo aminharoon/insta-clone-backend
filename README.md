@@ -72,7 +72,7 @@ insta-clone/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/aminharoon/insta-clone.git
+git clone [ https://github.com/aminharoon/insta-clone.git](https://github.com/aminharoon/insta-clone-backend.git)
 cd insta-clone
 ```
 
@@ -109,10 +109,6 @@ Server runs at `http://localhost:3000`
 ### Posts
 
 - `POST /api/posts/create` - Create new post (requires valid token)
-
-## 📝 License
-
-MIT
 
 ## 👨‍💻 Author
 
