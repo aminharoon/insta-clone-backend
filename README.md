@@ -37,28 +37,36 @@ A full-stack Instagram clone application built with **Node.js/Express** backend 
 ```
 insta-clone/
 ├── src/
+│   ├── app.js
+│   ├── constants.js
+│   ├── config/
+│   │   └── db.js
 │   ├── controllers/
 │   │   ├── auth.controler.js
-│   │   └── post.controler.js
+│   │   ├── post.controler.js
 │   │   └── user.controler.js
 │   ├── middleware/
 │   │   └── auth.middleware.js
 │   ├── models/
-│   │   ├── user.model.js
+│   │   ├── follow.model.js
 │   │   ├── post.model.js
-│   │   └── follow.model.js
+│   │   └── user.model.js
 │   ├── routes/
 │   │   ├── auth.route.js
-│   │   └── post.routes.js
-│   │   └── user.routes.js
-│   ├── config/
-│   │   └── db.js
-│   ├── app.js
-│   └── constants.js
-├── server.js
-├── package.json
+│   │   ├── post.routes.js
+│   │   └── user.route.js
+│   └── utils/
+│       ├── apiError.js
+│       └── asynhandler.js
 ├── .env
-└── .gitignore
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── Task.md
+├── package.json
+├── package-lock.json
+├── README.md
+└── server.js
 ```
 
 ## 🚀 Getting Started
@@ -91,6 +99,7 @@ DATABASE_URL=mongodb://localhost:27017
 DB_NAME=insta-clone
 JWT_SECRET=your_jwt_secret_key
 IMAGE_KIT_KEY=your_imagekit_private_key
+PORT=8000
 ```
 
 4. Start the server:
@@ -99,7 +108,8 @@ IMAGE_KIT_KEY=your_imagekit_private_key
 npm run dev
 ```
 
-Server runs at `http://localhost:3000`
+Server runs on `process.env.PORT` if set (for example, `http://localhost:8000`).
+If `PORT` is not set, the default is `http://localhost:3000`.
 
 ## 📡 API Endpoints
 
