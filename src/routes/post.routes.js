@@ -1,23 +1,43 @@
-const express = require("express")
-const postRouter = express.Router()
-const postController = require("../controllers/post.controler")
-const multer = require("multer")
-const upload = multer({ storage: multer.memoryStorage() })
-const verifyUser = require("../middleware/auth.middleware")
-
+const express = require("express");
+const postRouter = express.Router();
+const postController = require("../controllers/post.controler");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+const verifyUser = require("../middleware/auth.middleware");
+const asyncHandler = require("../utils/asynhandler");
 
 /**
- * post {"/api/posts "}- req.body -> caption and image file 
- * and this api is protected ->only those user will send the request on this api which has an valid token 
+ * @route POST /api/posts/create
+ * @description Create a new post
+ * @access Private
  */
-postRouter.post("/create", upload.single("image"), verifyUser, postController.createPostController)
+postRouter.post(
+  "/create",
+  upload.single("image"),
+  verifyUser,
+  asyncHandler(postController.createPostController)
+);
 
-/**get the all posts that user creates  */
-postRouter.get('/getPoste', verifyUser, postController.getPostController)
+/**
+ * @route GET /api/posts/getPoste
+ * @description Get all posts
+ * @access Private
+ */
+postRouter.get(
+  "/getPoste",
+  verifyUser,
+  asyncHandler(postController.getPostController)
+);
 
+/**
+ * @route GET /api/posts/details/:postId
+ * @description Get post details by post ID
+ * @access Private
+ */
+postRouter.get(
+  "/details/:postId",
+  verifyUser,
+  asyncHandler(postController.getUserDetailsController)
+);
 
-/**get post details like only the  */
-postRouter.get("/details/:postId", verifyUser, postController.getUserDetailsController)
-
-
-module.exports = postRouter
+module.exports = postRouter;

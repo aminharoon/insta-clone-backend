@@ -40,6 +40,7 @@ insta-clone/
 │   ├── controllers/
 │   │   ├── auth.controler.js
 │   │   └── post.controler.js
+│   │   └── user.controler.js
 │   ├── middleware/
 │   │   └── auth.middleware.js
 │   ├── models/
@@ -49,6 +50,7 @@ insta-clone/
 │   ├── routes/
 │   │   ├── auth.route.js
 │   │   └── post.routes.js
+│   │   └── user.routes.js
 │   ├── config/
 │   │   └── db.js
 │   ├── app.js
