@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
@@ -29,6 +30,9 @@ const userSchema = new mongoose.Schema(
       default:
         "https://ik.imagekit.io/se7odunboq/8a14fefc276ab576e8ceac207cace638.webp",
     },
+    refreshToken: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
@@ -42,6 +46,27 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
+userSchema.methods.generateAccessToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      username: this.username,
+      email: this.email,
+    },
+    process.env.JWT_ACCESS_TOKEN,
+    { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES }
+  );
+};
+
+userSchema.methods.generateRefreshToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.JWT_REFRESH_TOKEN,
+    { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES }
+  );
+};
 const userModel = mongoose.model("users", userSchema);
 
 module.exports = userModel;

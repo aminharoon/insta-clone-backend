@@ -1,15 +1,23 @@
+const { Accounts } = require("@imagekit/nodejs/resources");
 const userModel = require("../models/user.model");
 const ApiError = require("../utils/apiError");
-
-const jwt = require("jsonwebtoken");
 const ApiResponse = require("../utils/apiresponse");
 
-/**
- *
- * @param {*} req
- * @param {*} res
- */
+async function generateAccessTokenAndRefreshToken(userID) {
+  try {
+    const user = await userModel.findById(userID);
+    const AccessToken = await user.generateAccessToken();
+    const RefreshToken = await user.generateRefreshToken();
 
+    user.refreshToken = RefreshToken;
+
+    await user.save({ validateBeforeSave: false });
+
+    return { AccessToken, RefreshToken };
+  } catch (error) {
+    throw new ApiError(500, "something went wrong there  " + error.message);
+  }
+}
 async function registerController(req, res) {
   let { username, email, password, bio, profile_pic } = req.body;
 
@@ -28,26 +36,12 @@ async function registerController(req, res) {
     profile_pic,
   });
 
-  const token = jwt.sign(
-    { id: user._id, username: user.username },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1d",
-    }
-  );
-  res.cookie("token", token);
   const isUserPresent = await userModel.findById(user._id).select("-password");
   return res
     .status(201)
     .json(new ApiResponse(201, "user created ", isUserPresent));
 }
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @returns
- */
 async function loginController(req, res) {
   const { username, email, password } = req.body;
 
@@ -65,21 +59,57 @@ async function loginController(req, res) {
     throw new ApiError(409, "Invalid Password");
   }
 
-  const token = jwt.sign(
-    { id: user._id, username: user.username },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "2d",
-    }
-  );
-  res.cookie("token", token);
-  const isUserPresent = await userModel.findById(user._id).select("-password");
+  const { AccessToken, RefreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
+
+  const loggedUser = await userModel
+    .findById(user._id)
+    .select("-password -refreshToken");
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
   return res
     .status(200)
-    .json(new ApiResponse(200, "logged successfully ", isUserPresent));
+    .cookie("AccessToken", AccessToken, options)
+    .cookie("RefreshToken", RefreshToken, options)
+    .json(
+      new ApiResponse(200, "User logged In Successfully", {
+        user: loggedUser,
+        AccessToken,
+        RefreshToken,
+      })
+    );
+}
+
+async function logoutController(req, res) {
+  await userModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+
+    {
+      new: true,
+    }
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return res
+    .status(200)
+    .clearCookie("AccessToken", options)
+    .clearCookie("RefreshToken", options)
+    .json(new ApiResponse(200, "logged out successfully", {}));
 }
 
 module.exports = {
   registerController,
   loginController,
+  logoutController,
 };

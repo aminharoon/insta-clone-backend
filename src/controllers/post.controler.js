@@ -2,6 +2,8 @@ const postModel = require("../models/post.model");
 const imageKit = require("@imagekit/nodejs");
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/apiError");
+const ApiResponse = require("../utils/apiresponse");
+const userModel = require("../models/user.model");
 
 const ImageKit = new imageKit({
   privateKey: process.env.IMAGE_KET_KEY,
@@ -20,15 +22,19 @@ async function createPostController(req, res) {
   const post = await postModel.create({
     caption: req.body.caption,
     image_url: file.url,
-    user: req.user.id,
+    user: req.user._id,
   });
-  res.status(201).json(201, "post created successfully", post);
+  const user = await userModel.findById(req.user._id);
+
+  res
+    .status(201)
+    .json(new ApiResponse(201, "post is created successfully", { post, user }));
 }
 
 /**get the posts  */
 async function getPostController(req, res) {
   //verify the user
-  const userId = req.user.id;
+  const userId = req.user._id;
   const post = await postModel.find({
     user: userId,
   });
@@ -44,10 +50,12 @@ async function getPostController(req, res) {
 /**get the post details about specific post with the id  and also check the weather the post belongs to the user that the req come from  */
 
 async function getUserDetailsController(req, res) {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const postId = req.params.postId;
 
   const post = await postModel.findById(postId);
+  console.log(post);
+
   if (!post) {
     throw new ApiError(404, "404 POST NOT FOUND ");
   }
@@ -57,7 +65,9 @@ async function getUserDetailsController(req, res) {
     throw new ApiError(403, "forbidden content");
   }
 
-  res.status(200).json(200, "poste fetched successfully ", post);
+  res
+    .status(200)
+    .json(new ApiResponse(200, "post fetched successfully ", post));
 }
 
 module.exports = {

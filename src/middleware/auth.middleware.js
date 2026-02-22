@@ -4,17 +4,21 @@ const ApiError = require("../utils/apiError");
  */
 
 async function verifyUser(req, res, next) {
-  const token = req.cookies.token;
-  if (!token) {
-    throw new ApiError(401, "Token is needed ");
-  }
-  let decoded = null;
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const token = req.cookies.AccessToken;
+    if (!token) {
+      throw new ApiError(401, "Access Token Is Needed ");
+    }
+    let decoded = null;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+    } catch (error) {
+      throw new ApiError(401, error.message);
+    }
+    req.user = decoded;
+    next();
   } catch (error) {
-    throw new ApiError(401, error.message);
+    throw new ApiError(401, error?.message || "Invalid access token");
   }
-  req.user = decoded;
-  next();
 }
 module.exports = verifyUser;

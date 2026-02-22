@@ -2,6 +2,7 @@ const express = require("express");
 const authRoute = express.Router();
 const authController = require("../controllers/auth.controler");
 const asyncHandler = require("../utils/asynhandler");
+const verifyUser = require("../middleware/auth.middleware");
 
 /**
  * @route POST /api/auth/register
@@ -16,4 +17,16 @@ authRoute.post("/register", asyncHandler(authController.registerController));
  * @access Public
  */
 authRoute.post("/login", asyncHandler(authController.loginController));
+
+/**
+ * @route GET /api/auth/logout
+ * @description Logout a user
+ * @access Private
+ */
+
+authRoute.get(
+  "/logout",
+  verifyUser,
+  asyncHandler(authController.logoutController)
+);
 module.exports = authRoute;
