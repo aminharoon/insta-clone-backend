@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const ApiError = require("../utils/apiError");
 
 const jwt = require("jsonwebtoken");
+const ApiResponse = require("../utils/apiresponse");
 
 /**
  *
@@ -36,10 +37,9 @@ async function registerController(req, res) {
   );
   res.cookie("token", token);
   const isUserPresent = await userModel.findById(user._id).select("-password");
-  res.status(201).json({
-    message: "user is Created ",
-    user: isUserPresent,
-  });
+  return res
+    .status(201)
+    .json(new ApiResponse(201, "user created ", isUserPresent));
 }
 
 /**
@@ -74,10 +74,9 @@ async function loginController(req, res) {
   );
   res.cookie("token", token);
   const isUserPresent = await userModel.findById(user._id).select("-password");
-  res.status(200).json({
-    message: "Login Successfully ",
-    user: isUserPresent,
-  });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "logged successfully ", isUserPresent));
 }
 
 module.exports = {

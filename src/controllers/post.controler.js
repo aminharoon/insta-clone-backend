@@ -22,10 +22,7 @@ async function createPostController(req, res) {
     image_url: file.url,
     user: req.user.id,
   });
-  res.status(201).json({
-    message: "post is created successfully ",
-    post,
-  });
+  res.status(201).json(201, "post created successfully", post);
 }
 
 /**get the posts  */
@@ -35,10 +32,13 @@ async function getPostController(req, res) {
   const post = await postModel.find({
     user: userId,
   });
-  res.status(200).json({
-    message: "successfully fetch the post  ",
-    post,
-  });
+  if (!post) {
+    throw new ApiError(404, "unable to fetch the post ");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "post fetched successfully ", post));
 }
 
 /**get the post details about specific post with the id  and also check the weather the post belongs to the user that the req come from  */
@@ -50,23 +50,14 @@ async function getUserDetailsController(req, res) {
   const post = await postModel.findById(postId);
   if (!post) {
     throw new ApiError(404, "404 POST NOT FOUND ");
-    //   return res.status(404).json({
-    //     message: "404 POST NOT FOUND",
-    //   });
   }
 
   const isValidUser = post.user.toString() === userId;
   if (!isValidUser) {
     throw new ApiError(403, "forbidden content");
-    //   return res.status(403).json({
-    //     message: "forbidden content",
-    //   });
   }
 
-  res.status(200).json({
-    message: "post fetched successfully",
-    post,
-  });
+  res.status(200).json(200, "poste fetched successfully ", post);
 }
 
 module.exports = {

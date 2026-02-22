@@ -6,16 +6,13 @@ const ApiError = require("../utils/apiError");
 async function verifyUser(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    throw new ApiError(401, "Token not provided");
+    throw new ApiError(401, "Token is needed ");
   }
   let decoded = null;
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    return res.status(401).json({
-      message: "user is not authorized",
-      error: error.message,
-    });
+    throw new ApiError(401, error.message);
   }
   req.user = decoded;
   next();

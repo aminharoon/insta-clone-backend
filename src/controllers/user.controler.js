@@ -26,10 +26,13 @@ async function followUserController(req, res) {
     followee: followeeUsername,
   });
 
-  res.status(201).json({
-    message: `${followerUsername} are now following ${followeeUsername}`,
-    follow: followRecord,
-  });
+  res
+    .status(201)
+    .json(
+      201,
+      `${followerUsername} are now following ${followeeUsername}`,
+      followRecord
+    );
 }
 module.exports = {
   followUserController,
