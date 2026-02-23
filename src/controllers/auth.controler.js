@@ -2,6 +2,7 @@ const { Accounts } = require("@imagekit/nodejs/resources");
 const userModel = require("../models/user.model");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiresponse");
+const jwt = require("jsonwebtoken");
 
 async function generateAccessTokenAndRefreshToken(userID) {
   try {
@@ -78,25 +79,25 @@ async function loginController(req, res) {
     .json(
       new ApiResponse(200, "User logged In Successfully", {
         user: loggedUser,
-        AccessToken,
-        RefreshToken,
       })
     );
 }
 
 async function logoutController(req, res) {
-  await userModel.findByIdAndUpdate(
-    req.user._id,
-    {
-      $unset: {
-        refreshToken: 1,
+  const user = await userModel
+    .findByIdAndUpdate(
+      req.user._id,
+      {
+        $unset: {
+          refreshToken: 1,
+        },
       },
-    },
 
-    {
-      new: true,
-    }
-  );
+      {
+        new: true,
+      }
+    )
+    .select("-password ");
   const options = {
     httpOnly: true,
     secure: true,
@@ -105,11 +106,54 @@ async function logoutController(req, res) {
     .status(200)
     .clearCookie("AccessToken", options)
     .clearCookie("RefreshToken", options)
-    .json(new ApiResponse(200, "logged out successfully", {}));
+    .json(new ApiResponse(200, "logged out successfully", user));
 }
 
+async function handleRefreshToken(req, res) {
+  try {
+    const incomingRefreshToken = req.cookies?.RefreshToken;
+
+    if (!incomingRefreshToken) {
+      throw new ApiError(401, "unauthorized request");
+    }
+
+    const decoded = await jwt.verify(
+      incomingRefreshToken,
+      process.env.JWT_REFRESH_TOKEN
+    );
+    const user = await userModel.findById(decoded._id).select("-password ");
+    if (!user) {
+      throw new ApiError(401, "invalid refresh token");
+    }
+    if (user?.refreshToken !== incomingRefreshToken) {
+      throw new ApiError(401, " Refresh token is expire or used ");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { AccessToken, RefreshToken } =
+      await generateAccessTokenAndRefreshToken(user._id);
+
+    res
+      .status(200)
+      .cookie("AccessToken", AccessToken, options)
+      .cookie("RefreshToken", RefreshToken, options)
+      .json(
+        new ApiResponse(200, "Access token is refreshed successfully ", {
+          AccessToken,
+          RefreshToken,
+        })
+      );
+  } catch (error) {
+    throw new ApiError(401, `something went wrong ${error.message}`);
+  }
+}
 module.exports = {
   registerController,
   loginController,
   logoutController,
+  handleRefreshToken,
 };

@@ -29,4 +29,12 @@ authRoute.get(
   verifyUser,
   asyncHandler(authController.logoutController)
 );
+
+/**
+ * @route POST /api/auth/refresh_refreshToken
+ * @description Refresh access token using refresh token
+ * @access Private
+ */
+
+authRoute.post("/refresh_refreshToken", authController.handleRefreshToken);
 module.exports = authRoute;
