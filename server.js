@@ -9,5 +9,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("there was an error ", err.message);
+    console.log("Something Went Wrong ", err.message);
   });

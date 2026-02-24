@@ -24,7 +24,9 @@ async function createPostController(req, res) {
     image_url: file.url,
     user: req.user._id,
   });
-  const user = await userModel.findById(req.user._id);
+  const user = await userModel
+    .findById(req.user._id)
+    .select("-password -refreshToken -_id -profile_pic -createdAt -updatedAt");
 
   res
     .status(201)
@@ -47,14 +49,12 @@ async function getPostController(req, res) {
     .json(new ApiResponse(200, "post fetched successfully ", post));
 }
 
-/**get the post details about specific post with the id  and also check the weather the post belongs to the user that the req come from  */
-
+/** get user details by post id */
 async function getUserDetailsController(req, res) {
   const userId = req.user._id;
   const postId = req.params.postId;
 
   const post = await postModel.findById(postId);
-  console.log(post);
 
   if (!post) {
     throw new ApiError(404, "404 POST NOT FOUND ");
@@ -70,8 +70,28 @@ async function getUserDetailsController(req, res) {
     .json(new ApiResponse(200, "post fetched successfully ", post));
 }
 
+/** delete post by id  */
+async function deletePostController(req, res) {
+  const userId = req.user._id;
+  const postId = req.params.postId;
+
+  const post = await postModel.findById(postId);
+
+  if (!post) {
+    throw new ApiError(404, " POST NOT FOUND ");
+  }
+
+  const isValidUser = post.user.toString() === userId;
+  if (!isValidUser) {
+    throw new ApiError(403, "You can't delete this post ");
+  }
+  await post.deleteOne();
+
+  res.status(200).json(new ApiResponse(200, "Post is Deleted Successfully "));
+}
 module.exports = {
   createPostController,
   getPostController,
   getUserDetailsController,
+  deletePostController,
 };

@@ -11,6 +11,7 @@ const asyncHandler = require("../utils/asynhandler");
  * @description Create a new post
  * @access Private
  */
+
 postRouter.post(
   "/create",
   upload.single("image"),
@@ -23,6 +24,7 @@ postRouter.post(
  * @description Get all posts
  * @access Private
  */
+
 postRouter.get(
   "/getPoste",
   verifyUser,
@@ -34,10 +36,28 @@ postRouter.get(
  * @description Get post details by post ID
  * @access Private
  */
+
 postRouter.get(
   "/details/:postId",
   verifyUser,
   asyncHandler(postController.getUserDetailsController)
 );
+/**
+ * @route DELETE /api/posts/delete/:postId
+ * @description Delete a post by post ID
+ * @access Private
+ */
+
+postRouter.post(
+  "/delete/:postId",
+  verifyUser,
+  asyncHandler(postController.deletePostController)
+);
+
+/**
+ * @route LIKE /api/posts/like/:postId
+ * @description Like a post by post ID
+ * @access Private
+ */
 
 module.exports = postRouter;
