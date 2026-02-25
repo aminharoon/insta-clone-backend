@@ -64,4 +64,16 @@ postRouter.post(
   verifyUser,
   asyncHandler(postController.likePostController)
 );
+
+/**
+ * @route UNLIKE /api/posts/unlike/:postId
+ * @description Unlike a post by post ID
+ * @access Private
+ */
+
+postRouter.post(
+  "/unlike/:postID",
+  verifyUser,
+  asyncHandler(postController.unLikePostController)
+);
 module.exports = postRouter;

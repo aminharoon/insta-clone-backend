@@ -94,10 +94,6 @@ async function deletePostController(req, res) {
 /** like the post by id */
 
 async function likePostController(req, res) {
-  // • User is logged in
-  // • User id exists in database
-  // • Post id is valid ObjectId
-  // • Post exists
   const username = req.user.username;
   const postID = req.params.postID;
 
@@ -122,11 +118,25 @@ async function likePostController(req, res) {
   res.status(200).json(new ApiResponse(200, "post is liked ", like));
 }
 
-async function handleRequestController(req, res) {}
+async function unLikePostController(req, res) {
+  const postID = req.params.postID;
+
+  const isPost = await likeModel.findById(postID);
+
+  if (!isPost) {
+    throw new ApiError(404, "Post not found");
+  }
+  await likeModel.findByIdAndDelete(isPost._id);
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "post is disliked ", isPost));
+}
+
 module.exports = {
   createPostController,
   getPostController,
   getUserDetailsController,
   deletePostController,
   likePostController,
+  unLikePostController,
 };
