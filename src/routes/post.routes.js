@@ -59,5 +59,9 @@ postRouter.post(
  * @description Like a post by post ID
  * @access Private
  */
-
+postRouter.post(
+  "/like/:postID",
+  verifyUser,
+  asyncHandler(postController.likePostController)
+);
 module.exports = postRouter;

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiresponse");
 const userModel = require("../models/user.model");
+const likeModel = require("../models/likes.model");
 
 const ImageKit = new imageKit({
   privateKey: process.env.IMAGE_KET_KEY,
@@ -89,9 +90,43 @@ async function deletePostController(req, res) {
 
   res.status(200).json(new ApiResponse(200, "Post is Deleted Successfully "));
 }
+
+/** like the post by id */
+
+async function likePostController(req, res) {
+  // • User is logged in
+  // • User id exists in database
+  // • Post id is valid ObjectId
+  // • Post exists
+  const username = req.user.username;
+  const postID = req.params.postID;
+
+  const isPostFound = await postModel.findById(postID);
+  if (!isPostFound) {
+    throw new ApiError(404, "Post Not Found ");
+  }
+
+  const isAlreadyLiked = await likeModel.findOne({
+    post: postID,
+    user: username,
+  });
+  if (isAlreadyLiked) {
+    throw new ApiError(409, "post is already liked ok bsdk");
+  }
+
+  const like = await likeModel.create({
+    post: postID,
+    user: username,
+  });
+
+  res.status(200).json(new ApiResponse(200, "post is liked ", like));
+}
+
+async function handleRequestController(req, res) {}
 module.exports = {
   createPostController,
   getPostController,
   getUserDetailsController,
   deletePostController,
+  likePostController,
 };
