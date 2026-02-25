@@ -16,7 +16,7 @@ userRouter.post(
   asyncHandler(userController.followUserController)
 );
 
-/**
+/**http://localhost:8000/api/users/
  * @route POST /api/users/unfollow/:username
  * @description Unfollow a user
  * @access Private
