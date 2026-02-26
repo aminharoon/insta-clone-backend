@@ -16,7 +16,22 @@ authRoute.post("/register", asyncHandler(authController.registerController));
  * @description Login a user
  * @access Public
  */
-authRoute.post("/login", asyncHandler(authController.loginController));
+authRoute.post(
+  "/login",
+  verifyUser,
+  asyncHandler(authController.loginController)
+);
+
+/**
+ * @route GET /api/auth/profile
+ *
+ */
+
+authRoute.get(
+  "/profile",
+  verifyUser,
+  asyncHandler(authController.getProfileController)
+);
 
 /**
  * @route GET /api/auth/logout
@@ -37,4 +52,15 @@ authRoute.get(
  */
 
 authRoute.post("/refresh_refreshToken", authController.handleRefreshToken);
+
+/**
+ * @route GET /api/auth/profileDet:username
+ * @description Get user profile details by username
+ * @access Private
+ */
+authRoute.get(
+  "/profileDet/:username",
+  verifyUser,
+  asyncHandler(authController.userProfileController)
+);
 module.exports = authRoute;

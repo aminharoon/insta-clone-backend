@@ -94,7 +94,7 @@ async function deletePostController(req, res) {
 /** like the post by id */
 
 async function likePostController(req, res) {
-  const username = req.user.username;
+  const likedUser = req.user._id;
   const postID = req.params.postID;
 
   const isPostFound = await postModel.findById(postID);
@@ -104,7 +104,7 @@ async function likePostController(req, res) {
 
   const isAlreadyLiked = await likeModel.findOne({
     post: postID,
-    user: username,
+    user: likedUser,
   });
   if (isAlreadyLiked) {
     throw new ApiError(409, "post is already liked ok bsdk");
@@ -112,7 +112,7 @@ async function likePostController(req, res) {
 
   const like = await likeModel.create({
     post: postID,
-    user: username,
+    user: likedUser,
   });
 
   res.status(200).json(new ApiResponse(200, "post is liked ", like));

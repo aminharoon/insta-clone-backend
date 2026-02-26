@@ -83,6 +83,19 @@ async function loginController(req, res) {
     );
 }
 
+async function getProfileController(req, res) {
+  const userID = req.user._id;
+  const user = await userModel
+    .findById(userID)
+    .select("-password -refreshToken -_id");
+  if (!user) {
+    throw new ApiError(404, "user not found ");
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "user fetched successfully ", user));
+}
+
 async function logoutController(req, res) {
   const user = await userModel
     .findByIdAndUpdate(
@@ -151,9 +164,79 @@ async function handleRefreshToken(req, res) {
     throw new ApiError(401, `something went wrong ${error.message}`);
   }
 }
+
+async function userProfileController(req, res) {
+  const username = req.params.username;
+  // if (!userName) {
+  //   throw new ApiError(400, "username is required");
+  // }
+  const profile = await userModel.aggregate([
+    {
+      $match: {
+        username: username,
+      },
+    },
+    {
+      $lookup: {
+        from: "follows",
+        localField: "_id",
+        foreignField: "follower",
+        as: "followers",
+      },
+    },
+    {
+      $lookup: {
+        from: "follows",
+        localField: "_id",
+        foreignField: "following",
+        as: "followings",
+      },
+    },
+    {
+      $addFields: {
+        followersCount: {
+          $size: "$followers",
+        },
+        followingCount: {
+          $size: "$followings",
+        },
+        isFollowed: {
+          $cond: {
+            if: { $in: [req.user?._id, "$followers.follower"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        email: 1,
+        bio: 1,
+        profile_pic: 1,
+        followersCount: 1,
+        followingCount: 1,
+        isFollowed: 1,
+      },
+    },
+  ]);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "user profile details fetched successfully ",
+        profile[0]
+      )
+    );
+}
+
 module.exports = {
   registerController,
   loginController,
   logoutController,
   handleRefreshToken,
+  getProfileController,
+  userProfileController,
 };

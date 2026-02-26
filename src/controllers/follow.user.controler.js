@@ -4,35 +4,35 @@ const ApiResponse = require("../utils/apiresponse");
 const userModel = require("../models/user.model");
 
 async function followUserController(req, res) {
-  const followerUsername = req.user.username;
+  const follower = req.user._id;
 
-  const followingUsername = req.params.username;
+  const following = req.params.userID;
 
   /**
    * if the user does't exist in the database, throw an error
    */
-  const IsUserExists = await userModel.findOne({ username: followingUsername });
+  const IsUserExists = await userModel.findOne({ _id: following });
   if (!IsUserExists) {
     throw new ApiError(404, "User does not exist");
   }
   /**
    * Check if the user is trying to follow themselves
    */
-  if (followerUsername === followingUsername) {
+  if (follower === following) {
     throw new ApiError(409, "You can't follow your self");
   }
   /**
    * Check if the user is already following the target user
    */
   const isFollowed = await followModel.findOne({
-    follower: followerUsername,
-    following: followingUsername,
+    follower: follower,
+    following: following,
   });
 
   if (!isFollowed) {
     await followModel.create({
-      follower: followerUsername,
-      following: followingUsername,
+      follower: follower,
+      following: following,
       status: "pending",
     });
     return res.status(201).json(new ApiResponse(201, "follow request sent"));
@@ -57,35 +57,35 @@ async function followUserController(req, res) {
 }
 
 async function unFollowUserController(req, res) {
-  const followerUsername = req.user.username;
-  const followingUsername = req.params.username;
+  const followerUserId = req.user._id;
+  const followingUserId = req.params.userID;
 
-  if (followerUsername == followingUsername) {
+  if (followerUserId == followingUserId) {
     throw new ApiError(400, "You't unfollow you self");
   }
 
-  const user = await userModel.findOne({ username: followingUsername });
+  const user = await userModel.findOne({ _id: followingUserId });
   if (!user) {
     throw new ApiError(404, "username dos't exits");
   }
 
   const isFollowed = await followModel.findOne({
-    follower: followerUsername,
-    following: followingUsername,
+    follower: followerUserId,
+    following: followingUserId,
   });
   if (!isFollowed) {
-    throw new ApiError(400, `You are not following ${followingUsername}`);
+    throw new ApiError(400, `You are not following ${followerUserId}`);
   }
 
   await followModel.findByIdAndDelete(isFollowed._id);
   res
     .status(200)
-    .json(new ApiResponse(200, `You have unfollow the ${followingUsername}`));
+    .json(new ApiResponse(200, `You have unfollow the ${followingUserId}`));
 }
 
 async function acceptFollowRequestController(req, res) {
-  const targetUsername = req.user.username;
-  const followerUsername = req.params.username;
+  const targetUsername = req.user._id;
+  const followerUsername = req.params.userID;
 
   if (targetUsername === followerUsername) {
     throw new ApiError(400, "You can't accept your own request");
@@ -113,16 +113,16 @@ async function acceptFollowRequestController(req, res) {
 }
 
 async function rejectFollowRequestController(req, res) {
-  const loggedUsername = req.user.username;
-  const targetUsername = req.params.username;
+  const loggedUserId = req.user._id;
+  const targetUserId = req.params.id;
 
-  if (loggedUsername == targetUsername) {
+  if (loggedUserId == targetUserId) {
     throw new ApiError(400, "You can't reject your own request");
   }
 
   const request = await followModel.findOne({
-    follower: loggedUsername,
-    following: targetUsername,
+    follower: loggedUserId,
+    following: targetUserId,
   });
   if (!request) {
     throw new ApiError(404, "Follow Request Does't found ");

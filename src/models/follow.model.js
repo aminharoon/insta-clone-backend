@@ -3,10 +3,14 @@ const mongoose = require("mongoose");
 const followSchema = new mongoose.Schema(
   {
     follower: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
     following: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
     status: {
       type: String,

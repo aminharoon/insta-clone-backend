@@ -11,7 +11,7 @@ const userRouter = express.Router();
  */
 
 userRouter.post(
-  "/follow/:username",
+  "/follow/:userID",
   verifyUser,
   asyncHandler(userController.followUserController)
 );
@@ -22,7 +22,7 @@ userRouter.post(
  * @access Private
  */
 userRouter.post(
-  "/unfollow/:username",
+  "/unfollow/:userID",
   verifyUser,
   asyncHandler(userController.unFollowUserController)
 );
@@ -33,7 +33,7 @@ userRouter.post(
  * @access Private
  */
 userRouter.post(
-  "/follow/:username/accept",
+  "/follow/:userID/accept",
   verifyUser,
   asyncHandler(userController.acceptFollowRequestController)
 );
@@ -44,7 +44,7 @@ userRouter.post(
  * @access Private
  */
 userRouter.post(
-  "/follow/:username/reject",
+  "/follow/:userID/reject",
   verifyUser,
   asyncHandler(userController.rejectFollowRequestController)
 );
