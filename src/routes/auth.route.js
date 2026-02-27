@@ -18,7 +18,6 @@ authRoute.post("/register", asyncHandler(authController.registerController));
  */
 authRoute.post(
   "/login",
-  verifyUser,
   asyncHandler(authController.loginController)
 );
 

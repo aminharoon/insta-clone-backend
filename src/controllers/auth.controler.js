@@ -77,9 +77,7 @@ async function loginController(req, res) {
     .cookie("AccessToken", AccessToken, options)
     .cookie("RefreshToken", RefreshToken, options)
     .json(
-      new ApiResponse(200, "User logged In Successfully", {
-        user: loggedUser,
-      })
+      new ApiResponse(200, "User logged In Successfully", user)
     );
 }
 
@@ -167,9 +165,7 @@ async function handleRefreshToken(req, res) {
 
 async function userProfileController(req, res) {
   const username = req.params.username;
-  // if (!userName) {
-  //   throw new ApiError(400, "username is required");
-  // }
+
   const profile = await userModel.aggregate([
     {
       $match: {
