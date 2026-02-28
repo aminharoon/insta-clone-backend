@@ -3,8 +3,8 @@ import "../style/feed.scss";
 import Post from "../components/Post";
 import { usePost } from "../hooks/usePost";
 import { useEffect } from "react";
-import { Link } from "react-router";
 import { useAuth } from "../../auth/hooks/useAuth";
+import PersonalInfo from "../../shared/components/PersonalInfo";
 
 const Feed = () => {
   const { feed, loading, handleGetFeed, post } = usePost();
@@ -25,12 +25,7 @@ const Feed = () => {
       <div className="feed-page">
         <div className="feed">
           <div className="posts">
-            <div className="personal-info">
-              <button className="profile-pic-button">
-                <Link to={"/profile"}>Profile</Link>
-              </button>
-              <button className="create-post-button">craete post</button>
-            </div>
+            <PersonalInfo />
             {feed.map((post) => (
               <Post key={post._id} user={post.user} post={post} />
             ))}

@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import { Login } from "./features/auth/pages/Login.jsx";
 import { Register } from "./features/auth/pages/Register.jsx";
-import Feed from "./features/posts/pages/feed.jsx";
-import Profile from "./features/posts/pages/Profile.jsx";
+import Feed from "./features/posts/pages/Feed.jsx";
+import Profile from "./features/auth/pages/Profile.jsx";
 
 export const routes = createBrowserRouter([
   {
