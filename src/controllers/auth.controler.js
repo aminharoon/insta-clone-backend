@@ -48,7 +48,7 @@ async function loginController(req, res) {
 
   const user = await userModel.findOne({
     $or: [{ username: username }, { email: email }],
-  });
+  }).select("+password");
 
   if (!user) {
     throw new ApiError(404, `Invalid ${email ? "email" : "Username"}`);
@@ -77,7 +77,7 @@ async function loginController(req, res) {
     .cookie("AccessToken", AccessToken, options)
     .cookie("RefreshToken", RefreshToken, options)
     .json(
-      new ApiResponse(200, "User logged In Successfully", user)
+      new ApiResponse(200, "User logged In Successfully", loggedUser)
     );
 }
 

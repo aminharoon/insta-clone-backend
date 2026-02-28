@@ -23,15 +23,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+      select: false
     },
     bio: String,
     profile_pic: {
       type: String,
       default:
-        "https://ik.imagekit.io/se7odunboq/8a14fefc276ab576e8ceac207cace638.webp",
+        "https://ik.imagekit.io/se7odunboq/profile-placeholder-image-gray-silhouette-no-photo-profile-placeholder-image-gray-silhouette-no-photo-person-avatar-123478438.webp?updatedAt=1772272652690",
     },
     refreshToken: {
       type: String,
+      select: false
+
     },
   },
   { timestamps: true }
@@ -43,7 +46,7 @@ userSchema.pre("save", async function () {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-  return bcrypt.compare(password, this.password);
+  return bcrypt.compare(password, this.password)
 };
 
 userSchema.methods.generateAccessToken = async function () {

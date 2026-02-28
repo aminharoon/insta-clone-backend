@@ -76,4 +76,12 @@ postRouter.post(
   verifyUser,
   asyncHandler(postController.unLikePostController)
 );
+
+/**
+ * @route get /api/posts/getFeed
+ * @description Get the feed of posts for the authenticated user
+ * @access Private
+ */
+
+postRouter.get("/getfeed", verifyUser, asyncHandler(postController.getfeedController))
 module.exports = postRouter;

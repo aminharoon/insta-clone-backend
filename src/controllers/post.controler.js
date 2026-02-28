@@ -131,6 +131,14 @@ async function unLikePostController(req, res) {
     .status(200)
     .json(new ApiResponse(200, "post is disliked ", isPost));
 }
+async function getfeedController(req, res) {
+  const feed = (await postModel.find().populate("user"))
+
+  if (!feed) {
+    throw new ApiError(404, "feed is not found ")
+  }
+  return res.status(200).json(new ApiResponse(200, "feed fetch successfully ", feed))
+}
 
 module.exports = {
   createPostController,
@@ -139,4 +147,5 @@ module.exports = {
   deletePostController,
   likePostController,
   unLikePostController,
+  getfeedController
 };
