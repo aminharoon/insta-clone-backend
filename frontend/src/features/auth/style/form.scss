@@ -1,0 +1,37 @@
+@mixin flex-col($gap: 0rem) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+main {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .form-container {
+    @include flex-col(1rem);
+    padding: 0.7rem 0.9rem;
+    min-width: 400px;
+    border: 1px solid white;
+    border-radius: 1rem;
+    h1 {
+      text-align: center;
+      color: rgb(20, 167, 175);
+      text-shadow: 0px 0px 10px rgba(30, 147, 168, 0.61);
+      font-size: 2.5rem;
+    }
+
+    form {
+      @include flex-col(0.7rem);
+      input {
+        padding: 0.7rem 0.5rem;
+        font-size: 1.2rem;
+        border: none;
+        outline: none;
+        border-radius: 0.7rem;
+      }
+    }
+  }
+}

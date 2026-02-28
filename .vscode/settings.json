@@ -1,28 +1,4 @@
 {
-  "workbench.colorTheme": "Default Dark Modern",
-  "workbench.iconTheme": "material-icon-theme",
-  "editor.fontSize": 14,
-  "editor.fontFamily": "Consolas, 'Courier New', monospace",
-  "editor.fontLigatures": false,
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "material-icon-theme.files.associations": {
-    "*auth*.js": "shield",
-    "*middleware*.js": "settings",
-    "*controler*.js": "database",
-    "*model*.js": "database",
-    "*route*.js": "router",
-    "*constant*.js": "settings",
-    "*config*.js": "gear"
-  }
+  "liveSassCompile.settings.formats": [],
+  "liveSassCompile.settings.generateMap": false
 }

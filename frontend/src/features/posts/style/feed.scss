@@ -1,0 +1,171 @@
+.feed-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px 0;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  width: 400px;
+}
+
+.feed {
+  width: 600px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.personal-info {
+  background: red;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.2rem;
+  margin-top: 2rem;
+  padding: 20px;
+  height: 60px;
+
+  .profile-pic-button,
+  .create-post-button {
+    padding: 0.7rem 1.9rem;
+    border: none;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 0.2rem;
+  }
+
+  .create-post-button {
+    color: white;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(
+      45deg,
+      #f09433 0%,
+      #e6683c 25%,
+      #dc2743 50%,
+      #cc2366 75%,
+      #bc1888 100%
+    );
+  }
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+}
+
+.post {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  width: 100%;
+  min-width: 0;
+}
+
+/* User Header */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #efefef;
+  cursor: pointer;
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f0f0f0;
+  }
+
+  p {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+    color: #000;
+
+    &:hover {
+      color: #0095f6;
+    }
+  }
+}
+
+/* Post Image */
+.post > img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+/* Post Footer */
+.bottom {
+  padding: 16px;
+  width: 100%;
+  min-width: 0;
+
+  .caption {
+    font-size: 14px;
+    margin: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
+    color: #000;
+
+    strong {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .feed-page {
+    padding: 0;
+  }
+
+  .post {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .user,
+  .bottom {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

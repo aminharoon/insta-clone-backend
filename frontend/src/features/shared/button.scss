@@ -1,0 +1,16 @@
+.button {
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 0.5rem;
+  &.primary-button {
+    background-color: #4f46e5;
+  }
+  &:active {
+    transform: scale(0.5);
+  }
+}
