@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "../style/profile.scss";
-import { useAuth } from "../../auth/hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 const Profile = () => {
   const { user, loading, handlegetprofile } = useAuth();
