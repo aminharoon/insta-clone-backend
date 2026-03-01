@@ -166,6 +166,8 @@ async function handleRefreshToken(req, res) {
 async function userProfileController(req, res) {
   const username = req.params.username;
 
+
+
   const profile = await userModel.aggregate([
     {
       $match: {
@@ -217,6 +219,8 @@ async function userProfileController(req, res) {
       },
     },
   ]);
+
+
   return res
     .status(200)
     .json(
@@ -228,6 +232,14 @@ async function userProfileController(req, res) {
     );
 }
 
+async function getAllusers(req, res) {
+  const user = await userModel.find()
+  if (!user) {
+    throw new ApiError(404, "user's not found  ")
+  }
+  return res.status(200).json(new ApiResponse(200, "user fetched successfully", user))
+}
+
 module.exports = {
   registerController,
   loginController,
@@ -235,4 +247,5 @@ module.exports = {
   handleRefreshToken,
   getProfileController,
   userProfileController,
+  getAllusers
 };

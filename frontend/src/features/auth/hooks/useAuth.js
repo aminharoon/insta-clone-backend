@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
-import { Login, Register, Profile } from "../services/auth.api";
+import { Login, Register, Profile, logout } from "../services/auth.api";
 
 export const useAuth = () => {
     const context = useContext(AuthContext)
@@ -21,14 +21,22 @@ export const useAuth = () => {
     }
 
 
-    const handlegetprofile = async () => {
+    const handlegetprofile = async (username) => {
         setLoading(true)
-        const res = await Profile()
+        const res = await Profile(username)
         setUser(res.data)
         setLoading(false)
 
     }
+
+    const handleLogout = async () => {
+        setLoading(true)
+        const res = await logout()
+        setUser(res.data)
+        setLoading(false)
+    }
+
     return {
-        user, loading, handlelogin, handleregister, handlegetprofile
+        user, loading, handlelogin, handleregister, handlegetprofile, handleLogout
     }
 }

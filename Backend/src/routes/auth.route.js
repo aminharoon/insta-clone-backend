@@ -62,4 +62,6 @@ authRoute.get(
   verifyUser,
   asyncHandler(authController.userProfileController)
 );
+
+authRoute.get("/getAllUsers", asyncHandler(authController.getAllusers))
 module.exports = authRoute;

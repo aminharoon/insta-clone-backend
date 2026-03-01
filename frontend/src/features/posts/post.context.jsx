@@ -7,6 +7,8 @@ export const PostContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState(null);
   const [user, setUser] = useState("");
+  const [caption, setCaption] = useState("");
+  const [file, setFile] = useState("");
   return (
     <PostContext.Provider
       value={{
@@ -16,6 +18,10 @@ export const PostContextProvider = ({ children }) => {
         setLoading,
         post,
         setPost,
+        caption,
+        setCaption,
+        file,
+        setFile,
       }}
     >
       {children}

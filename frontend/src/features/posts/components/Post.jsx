@@ -2,15 +2,10 @@ import React from "react";
 import { Link } from "react-router";
 
 const Post = ({ user, post }) => {
-  const profile = (id) => {
-    console.log("this function has been called");
-    console.log(id);
-  };
-
   return (
     <div className="post">
       <div className="user">
-        <Link to={"/profile"}>
+        <Link to={`/profile/${user.username}`}>
           <img src={user.profile_pic} alt="" />
         </Link>
         <p>

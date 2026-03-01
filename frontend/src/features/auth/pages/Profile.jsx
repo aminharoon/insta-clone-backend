@@ -1,15 +1,27 @@
 import React, { useEffect } from "react";
 import "../style/profile.scss";
 import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
+import { useParams } from "react-router";
 
 const Profile = () => {
   const { user, loading, handlegetprofile } = useAuth();
-
+  const { username } = useParams();
   useEffect(() => {
-    handlegetprofile();
-  }, []);
+    handlegetprofile(username);
+  }, [username]);
 
-  if (loading || !user) {
+  console.log(user.followingCount);
+
+  if (loading) {
+    return (
+      <main className="profile-page">
+        <h2>Loading...</h2>
+      </main>
+    );
+  }
+
+  if (!user) {
     return (
       <main className="profile-page">
         <h2>Loading...</h2>
@@ -23,25 +35,25 @@ const Profile = () => {
         {/* Profile Header */}
         <div className="profile-header">
           <div className="profile-pic">
-            <img
-              src={
-                user.profile_pic ||
-                "https://ik.imagekit.io/se7odunboq/profile-placeholder-image-gray-silhouette-no-photo-profile-placeholder-image-gray-silhouette-no-photo-person-avatar-123478438.webp?updatedAt=1772272652690"
-              }
-              alt="profile"
-            />
+            <img src={user.profile_pic} alt="profile" />
           </div>
           <div className="profile-details">
-            <h2>@{user.username}</h2>
+            <div className="follow-con">
+              <h2>@{user.username}</h2>
+              <button className="button primary-button">
+                {user.isFollowed ? "unfollow" : "follow"}
+              </button>
+            </div>
+
             <div className="profile-stats">
               <span>
                 <strong>12</strong> posts
               </span>
               <span>
-                <strong>345</strong> followers
+                <strong>{user.followersCount}</strong> followers
               </span>
               <span>
-                <strong>123</strong> following
+                <strong>{user.followingCount}</strong> following
               </span>
             </div>
             <div className="profile-bio">

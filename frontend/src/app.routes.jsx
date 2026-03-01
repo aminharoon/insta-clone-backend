@@ -3,8 +3,13 @@ import { Login } from "./features/auth/pages/Login.jsx";
 import { Register } from "./features/auth/pages/Register.jsx";
 import Feed from "./features/posts/pages/Feed.jsx";
 import Profile from "./features/auth/pages/Profile.jsx";
+import CreatePost from "./features/posts/components/CreatePost.jsx";
 
 export const routes = createBrowserRouter([
+  {
+    path: "/",
+    element: <Feed />,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -14,12 +19,17 @@ export const routes = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/",
-    element: <Feed />,
+    path: "/logout",
+    element: <Login />,
+  },
+
+  {
+    path: "/profile/:username",
+    element: <Profile />,
   },
   {
-    path: "/profile",
-    element: <Profile />,
+    path: "/create-post",
+    element: <CreatePost />,
   },
   {
     path: "*",

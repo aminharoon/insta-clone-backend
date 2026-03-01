@@ -3,7 +3,7 @@ import "../style/feed.scss";
 import Post from "../components/Post";
 import { usePost } from "../hooks/usePost";
 import { useEffect } from "react";
-import { useAuth } from "../../auth/hooks/useAuth";
+
 import PersonalInfo from "../../shared/components/PersonalInfo";
 
 const Feed = () => {
@@ -11,7 +11,7 @@ const Feed = () => {
 
   useEffect(() => {
     handleGetFeed();
-  }, []);
+  }, [post]);
   if (loading || !feed) {
     return (
       <main>
