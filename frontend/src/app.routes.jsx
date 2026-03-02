@@ -8,11 +8,15 @@ import CreatePost from "./features/posts/components/CreatePost.jsx";
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <Feed />,
+    element: <Login />,
   },
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/feed",
+    element: <Feed />,
   },
   {
     path: "/register",

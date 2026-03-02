@@ -42,6 +42,7 @@
   scroll-snap-stop: always;
   width: 100%;
   min-width: 0;
+  position: relative;
 }
 
 /* User Header */
@@ -80,6 +81,20 @@
   display: block;
   max-height: 500px;
   object-fit: cover;
+}
+.icons {
+  padding: 20px;
+
+  button {
+    display: flex;
+    background: transparent;
+    i {
+      font-size: 2.5rem;
+    }
+    .isLiked {
+      color: red;
+    }
+  }
 }
 
 /* Post Footer */

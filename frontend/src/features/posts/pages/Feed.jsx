@@ -20,15 +20,18 @@ const Feed = () => {
     );
   }
   console.log(feed);
+
   return (
     <main>
       <div className="feed-page">
         <div className="feed">
           <div className="posts">
             <PersonalInfo />
-            {feed.map((post) => (
-              <Post key={post._id} user={post.user} post={post} />
-            ))}
+            {feed
+              .filter((post) => post)
+              .map((post) => (
+                <Post key={post._id} user={post.user} post={post} />
+              ))}
           </div>
         </div>
       </div>

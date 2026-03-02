@@ -5,6 +5,8 @@ const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiresponse");
 const userModel = require("../models/user.model");
 const likeModel = require("../models/likes.model");
+const { default: mongoose } = require("mongoose");
+
 
 const ImageKit = new imageKit({
   privateKey: process.env.IMAGE_KET_KEY,
@@ -25,13 +27,14 @@ async function createPostController(req, res) {
     image_url: file.url,
     user: req.user._id,
   });
+  await post.populate("user")
   const user = await userModel
     .findById(req.user._id)
     .select("-password -refreshToken -_id -profile_pic -createdAt -updatedAt");
 
   res
     .status(201)
-    .json(new ApiResponse(201, "post is created successfully", { post, user }));
+    .json(new ApiResponse(201, "post is created successfully", post));
 }
 
 /**get the posts  */
@@ -132,13 +135,28 @@ async function unLikePostController(req, res) {
     .json(new ApiResponse(200, "post is disliked ", isPost));
 }
 async function getfeedController(req, res) {
-  const feed = (await postModel.find().populate("user"))
+  const userId = req.user._id;
+  const feed = await Promise.all(
+    (await postModel.find({}).sort({ _id: -1 }).populate("user").lean())
+      .map(async (post) => {
+        const user_id = new mongoose.Types.ObjectId(req.user._id)
+        const isLiked = await likeModel.findOne({
+          post: post._id,
+          user: user_id
+        });
+
+        post.isLiked = Boolean(isLiked);
+        return post;
+      })
+  );
 
   if (!feed) {
-    throw new ApiError(404, "feed is not found ")
+    throw new ApiError(404, "feed is not found ");
   }
-  return res.status(200).json(new ApiResponse(200, "feed fetch successfully ", feed))
+  return res.status(200).json(new ApiResponse(200, "feed fetch successfully ", feed));
 }
+
+
 
 module.exports = {
   createPostController,

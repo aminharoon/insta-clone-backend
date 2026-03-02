@@ -11,8 +11,6 @@ const Profile = () => {
     handlegetprofile(username);
   }, [username]);
 
-  console.log(user.followingCount);
-
   if (loading) {
     return (
       <main className="profile-page">

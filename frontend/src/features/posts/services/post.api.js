@@ -21,7 +21,7 @@ export const create_post = async (caption, file) => {
         formData.append("caption", caption)
         formData.append("image", file)
         const res = await api.post("posts/create", formData)
-        return res.data
+        return res.data.post
     } catch (error) {
         console.error("something went wrong while creating an post ", error.message)
 

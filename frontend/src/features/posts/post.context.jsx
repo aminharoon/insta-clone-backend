@@ -3,12 +3,10 @@ import { createContext, useState } from "react";
 export const PostContext = createContext();
 
 export const PostContextProvider = ({ children }) => {
-  const [feed, setFeed] = useState(null);
+  const [feed, setFeed] = useState();
   const [loading, setLoading] = useState(false);
-  const [post, setPost] = useState(null);
-  const [user, setUser] = useState("");
-  const [caption, setCaption] = useState("");
-  const [file, setFile] = useState("");
+  const [post, setPost] = useState([]);
+
   return (
     <PostContext.Provider
       value={{
@@ -18,10 +16,6 @@ export const PostContextProvider = ({ children }) => {
         setLoading,
         post,
         setPost,
-        caption,
-        setCaption,
-        file,
-        setFile,
       }}
     >
       {children}

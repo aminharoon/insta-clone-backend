@@ -12,7 +12,7 @@ const CreatePost = () => {
     e.preventDefault();
     const file = currentInputref.current.files[0];
     handleCreatePost(caption, file);
-    navigate("/");
+    navigate("/feed");
   };
 
   return (

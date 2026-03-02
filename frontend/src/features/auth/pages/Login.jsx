@@ -15,7 +15,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handlelogin(username, password);
-    navigate("/");
+    navigate("/feed");
   };
   if (loading) {
     return (
