@@ -110,7 +110,10 @@ async function likePostController(req, res) {
     user: likedUser,
   });
   if (isAlreadyLiked) {
-    throw new ApiError(409, "post is already liked ok bsdk");
+    await likeModel.findByIdAndDelete(isAlreadyLiked._id);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "post is disliked ", { unliked: true }));
   }
 
   const like = await likeModel.create({

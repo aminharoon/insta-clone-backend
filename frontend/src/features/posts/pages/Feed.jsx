@@ -11,7 +11,7 @@ const Feed = () => {
 
   useEffect(() => {
     handleGetFeed();
-  }, [post]);
+  }, []);
   if (loading || !feed) {
     return (
       <main>
@@ -27,11 +27,9 @@ const Feed = () => {
         <div className="feed">
           <div className="posts">
             <PersonalInfo />
-            {feed
-              .filter((post) => post)
-              .map((post) => (
-                <Post key={post._id} user={post.user} post={post} />
-              ))}
+            {feed.map((post) => (
+              <Post key={post._id} user={post.user} post={post} />
+            ))}
           </div>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router";
+import { usePost } from "../hooks/usePost";
 
 const Post = ({ user, post }) => {
-  console.log(post.isLiked);
+  const { loading, handleLike } = usePost();
+
   return (
     <div className="post">
       <div className="user">
@@ -14,7 +16,20 @@ const Post = ({ user, post }) => {
         </p>
       </div>
       <img src={post.image_url} alt="" />
+
       <div className="icons">
+        {post.isLiked ? (
+          <div className="like_icons" onClick={() => handleLike(post._id)}>
+            <i class="ri-heart-2-fill isLiked"></i>
+          </div>
+        ) : (
+          <div className="unlike_icons" onClick={() => handleLike(post._id)}>
+            <i class="ri-heart-line "></i>
+          </div>
+        )}
+      </div>
+
+      {/* <div className="icons" onClick={() => handleLike(post._id)}>
         {post.isLiked ? (
           <button>
             <i class="ri-heart-2-fill isLiked"></i>
@@ -25,7 +40,7 @@ const Post = ({ user, post }) => {
             <i class="ri-heart-line "></i>
           </button>
         )}
-      </div>
+      </div> */}
       <div className="bottom">
         <p className="caption">{post.caption}</p>
       </div>

@@ -29,3 +29,25 @@ export const create_post = async (caption, file) => {
 
 }
 
+export const like_post = async (post_id) => {
+    try {
+        const res = await api.post(`posts/like/${post_id}`)
+        return res.data
+
+    } catch (e) {
+        console.error("something went wrong while like the post " + e.message)
+
+    }
+
+}
+export const unlike_post = async (post_id) => {
+    try {
+        const res = await api.post(`posts/unlike/${post_id}`)
+        return res.data
+
+    } catch (e) {
+        console.error("something went wrong while unlike the post ", e.message)
+
+    }
+
+}
